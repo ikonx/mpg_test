@@ -1,5 +1,5 @@
 import { AxiosPromise } from "axios";
-import { axiosInstance } from ".";
+import { axiosInstance, replaceStringWithPattern } from ".";
 
 export enum ENDPOINT_ENTITIES {
   CHAMPIONSHIP = ":championship_id",
@@ -9,13 +9,28 @@ export enum ENDPOINT_ENTITIES {
 const CHAMPIONSHIP_ENDPOINT = `championship/${ENDPOINT_ENTITIES.CHAMPIONSHIP}/2020`;
 const PLAYER_ENDPOINT = `player/${ENDPOINT_ENTITIES.PLAYER}?season=2018`;
 
-const getChampionship = axiosInstance.get(CHAMPIONSHIP_ENDPOINT);
-const getPlayer = axiosInstance.get(PLAYER_ENDPOINT);
+const getChampionship = async (championship_id: number) => {
+  const endpoint = replaceStringWithPattern(
+    CHAMPIONSHIP_ENDPOINT,
+    ENDPOINT_ENTITIES.CHAMPIONSHIP,
+    championship_id
+  );
+  return axiosInstance.get(endpoint);
+};
+
+const getPlayer = async (player_id: number) => {
+  const endpoint = replaceStringWithPattern(
+    PLAYER_ENDPOINT,
+    ENDPOINT_ENTITIES.PLAYER,
+    player_id
+  );
+  return axiosInstance.get(endpoint);
+};
 
 interface Http {
   get: {
-    championship: AxiosPromise;
-    player: AxiosPromise;
+    championship: (championship_id: number) => AxiosPromise;
+    player: (player_id: number) => AxiosPromise;
   };
 }
 

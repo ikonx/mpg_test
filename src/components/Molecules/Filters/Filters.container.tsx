@@ -25,7 +25,6 @@ export const Filters = ({
         clearButtonMode="always"
         onChangeText={(value: string) => {
           props.onFilter(value, "name")();
-          console.log("value, ", value);
         }}
       />
       <Spacer size={16} />

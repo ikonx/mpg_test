@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { ULTRA_POSITION } from "../utils";
 import { http } from "../utils/http";
 
+// create interfaces for all position with correct stats ect...
 export interface Player {
   club: string;
   firstname: string | null;
@@ -15,32 +16,52 @@ export interface Player {
     currentChampionship: number;
     percentageStarter: number;
     sumGoals: number;
+    sumGoalAssist: number;
+    sumPenalties: number;
+    minutesByGoal: number;
+    goalByMatch: number;
+    shotByMatch: number;
+    sumBigChanceMissed: number;
+    percentageWonContest: number;
+    wonContestByMatch: number;
+    percentageWonDuel: number;
+    wonDuelByMatch: number;
+    lostBallByMatch: number;
+    foulsByMatch: number;
+    foulsEnduredByMatch: number;
+    shotOnTargetByMatch: number;
+    percentageShotOnTarget: number;
+    
+    goalsConcededByMatch: number;
+    sumSaves: number;
+    sumDeflect: number;
+    sumPenaltySave: number;
   };
   teamId: number;
   ultraPosition: ULTRA_POSITION;
 }
 
-interface ChampionshipHook {
-  players: Player[];
+interface PlayerHook {
+  player: Player | null;
   loading: boolean;
   error: AxiosError | null;
 }
 
-export const useChampionship = (championship_id: number): ChampionshipHook => {
-  const [players, setPlayers] = useState<Player[]>([]);
+export const usePlayerDetails = (player_id: string): PlayerHook => {
+  const [player, setPlayer] = useState<Player | null>(null);
   const [loading, setLoader] = useState(false);
   const [error, setError] = useState<AxiosError | null>(null);
 
   useEffect(() => {
     setLoader((prevState) => !prevState);
     http.get
-      .championship(championship_id)
+      .player(player_id)
       .then((res: any) => {
-        setPlayers(res.data);
+        setPlayer(res.data);
       })
       .catch((error) => setError(error))
       .finally(() => setLoader((prevState) => !prevState));
   }, []);
 
-  return { players, loading, error };
+  return { player, loading, error };
 };

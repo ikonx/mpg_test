@@ -8,10 +8,11 @@ import {
   Text,
   View,
 } from "react-native";
+import { TouchableOpacity } from "react-native-gesture-handler";
 
 import { Player } from "../../../hooks/useChampionship";
 import { usePlayerDetails } from "../../../hooks/usePlayerDetails";
-import { ULTRA_POSITION_HUMAIN_READABLE } from "../../../utils";
+import { ULTRA_POSITION, ULTRA_POSITION_HUMAIN_READABLE } from "../../../utils";
 import Grid from "../../Atoms/Grid/Grid";
 import Spacer from "../../Atoms/Space/Space";
 import { StatsBlock } from "../../Molecules/StatsBlock/StatsBlock";
@@ -67,7 +68,9 @@ export const DetailsScreen = ({ route }: Props) => {
   const goalsData: StatsTableField[] = [
     {
       label: "Buts (pén.)",
-      value: `${player?.stats.sumGoals} (${player?.stats.sumPenalties})`,
+      value: player?.stats.sumGoals
+        ? `${player?.stats.sumGoals} (${player?.stats.sumPenalties})`
+        : undefined,
     },
     {
       label: "Fréquence de buts (min.)",
@@ -87,23 +90,42 @@ export const DetailsScreen = ({ route }: Props) => {
     },
   ];
 
+  const goalEffectiveData: StatsTableField[] = [
+    {
+      label: "Buts encaissés par match",
+      value: player?.stats.goalsConcededByMatch,
+    },
+    {
+      label: "Arrêts réalisés",
+      value: player?.stats.sumSaves,
+    },
+    {
+      label: "Parades",
+      value: player?.stats.sumDeflect,
+    },
+    {
+      label: "Pénaltys sauvés",
+      value: player?.stats.sumPenaltySave,
+    },
+  ];
+
   return (
     <>
-      {Platform.OS === "ios" && (
-        <View
-          style={{
-            width: "100%",
-            height: 44,
-            position: "absolute",
-            top: 0,
-            left: 0,
-            backgroundColor: "#45c945",
-          }}
-        />
-      )}
+      <View
+        style={{
+          width: "100%",
+          height: 44,
+          position: "absolute",
+          top: 0,
+          left: 0,
+          backgroundColor: "#45c945",
+        }}
+      />
       <StyledDetailsContains edges={["top", "left", "right"]}>
         <StyledDetailsHeader>
-          <Button title="Fermer" onPress={goBack} color="white" />
+          <TouchableOpacity onPress={goBack}>
+            <Text style={{ color: "white" }}>Fermer</Text>
+          </TouchableOpacity>
         </StyledDetailsHeader>
         <ScrollView>
           <StyledHero>
@@ -138,15 +160,25 @@ export const DetailsScreen = ({ route }: Props) => {
                     value={player!.stats.sumGoalAssist}
                   />
                 </Grid>
-                <Grid
-                  style={{ padding: 8 }}
-                  flexWrap="wrap"
-                  justifyContent="space-between"
-                >
-                  <StatsTable title="EFFICACE ?" fields={effectiveData} />
-                  <Spacer size={24} />
-                  <StatsTable title="IL PLANTE ?" fields={goalsData} />
-                </Grid>
+                {player.ultraPosition !== ULTRA_POSITION.GOAL_KEEPER ? (
+                  <Grid
+                    style={{ padding: 8 }}
+                    flexWrap="wrap"
+                    justifyContent="space-between"
+                  >
+                    <StatsTable title="EFFICACE ?" fields={effectiveData} />
+                    <Spacer size={24} />
+                    <StatsTable title="IL PLANTE ?" fields={goalsData} />
+                  </Grid>
+                ) : (
+                  <Grid
+                    style={{ padding: 8 }}
+                    flexWrap="wrap"
+                    justifyContent="space-between"
+                  >
+                    <StatsTable title="EFFICACE ?" fields={goalEffectiveData} />
+                  </Grid>
+                )}
               </>
             )}
           </StyledHero>

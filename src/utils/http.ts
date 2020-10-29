@@ -7,7 +7,7 @@ export enum ENDPOINT_ENTITIES {
 }
 
 const CHAMPIONSHIP_ENDPOINT = `championship/${ENDPOINT_ENTITIES.CHAMPIONSHIP}/2020`;
-const PLAYER_ENDPOINT = `player/${ENDPOINT_ENTITIES.PLAYER}?season=2018`;
+const PLAYER_ENDPOINT = `player/${ENDPOINT_ENTITIES.PLAYER}?season=2020`;
 
 const getChampionship = async (championship_id: number) => {
   const endpoint = replaceStringWithPattern(
@@ -18,11 +18,12 @@ const getChampionship = async (championship_id: number) => {
   return axiosInstance.get(endpoint);
 };
 
-const getPlayer = async (player_id: number) => {
+const getPlayer = async (player_id: string) => {
+  const parsedPlayerId = replaceStringWithPattern(player_id, "player_", "");
   const endpoint = replaceStringWithPattern(
     PLAYER_ENDPOINT,
     ENDPOINT_ENTITIES.PLAYER,
-    player_id
+    parsedPlayerId
   );
   return axiosInstance.get(endpoint);
 };
@@ -30,7 +31,7 @@ const getPlayer = async (player_id: number) => {
 interface Http {
   get: {
     championship: (championship_id: number) => AxiosPromise;
-    player: (player_id: number) => AxiosPromise;
+    player: (player_id: string) => AxiosPromise;
   };
 }
 

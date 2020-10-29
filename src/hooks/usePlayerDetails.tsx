@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { ULTRA_POSITION } from "../utils";
 import { http } from "../utils/http";
 
+// create interfaces for all position with correct stats ect...
 export interface Player {
   club: string;
   firstname: string | null;
@@ -21,7 +22,6 @@ export interface Player {
     goalByMatch: number;
     shotByMatch: number;
     sumBigChanceMissed: number;
-    
     percentageWonContest: number;
     wonContestByMatch: number;
     percentageWonDuel: number;
@@ -31,6 +31,11 @@ export interface Player {
     foulsEnduredByMatch: number;
     shotOnTargetByMatch: number;
     percentageShotOnTarget: number;
+    
+    goalsConcededByMatch: number;
+    sumSaves: number;
+    sumDeflect: number;
+    sumPenaltySave: number;
   };
   teamId: number;
   ultraPosition: ULTRA_POSITION;

@@ -1,23 +1,26 @@
 import { useNavigation } from "@react-navigation/native";
 import { StatusBar } from "expo-status-bar";
-import React, { Ref, useEffect, useRef, useState } from "react";
-import {
-  FlatList,
-  Platform,
-  SafeAreaView,
-  ScrollView,
-  Text,
-  View,
-} from "react-native";
+import React, { useEffect, useRef, useState } from "react";
+import { FlatList, Platform, SafeAreaView, Text, View } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
+
+import Grid from "../../Atoms/Grid/Grid";
+import { Filters } from "../../Molecules/Filters/Filters.container";
+
 import { Player, useChampionship } from "../../../hooks/useChampionship";
 import {
   NAVIGATION_SCREENS,
   ULTRA_POSITION,
   ULTRA_POSITION_HUMAIN_READABLE,
 } from "../../../utils";
-import Grid from "../../Atoms/Grid/Grid";
-import { Filters } from "../../Molecules/Filters/Filters.container";
+
+import {
+  StyledHomeScreen,
+  StyledListHeader,
+  StyledListHeaderLabel,
+  StyledListItem,
+  StyledListItemLabel,
+} from "./styles";
 
 interface Props {}
 
@@ -38,7 +41,7 @@ export const HomeScreen = (props: Props) => {
   useEffect(() => {
     let newPlayers = [...defaultPlayers];
 
-    if (filters.name !== null) {
+    if (filters.name) {
       newPlayers = newPlayers.filter(
         (player) =>
           (player.firstname &&
@@ -71,6 +74,7 @@ export const HomeScreen = (props: Props) => {
       setFilters({ ...filters, ultraPosition: newValue });
     }
   };
+
   const goToPlayerDetails = (player: Player) =>
     navigation.navigate({
       params: { player },
@@ -90,7 +94,7 @@ export const HomeScreen = (props: Props) => {
         }}
       />
       <StatusBar style="light" />
-      <SafeAreaView
+      <StyledHomeScreen
         style={{
           flex: 1,
           paddingTop: Platform.OS === "android" ? 44 : 0,
@@ -104,29 +108,17 @@ export const HomeScreen = (props: Props) => {
         <Grid flexDirection="column" style={{ flex: 1 }}>
           {!loading && players.length > 0 && (
             <>
-              <Grid
-                justifyContent="space-between"
-                style={{
-                  width: "100%",
-                  backgroundColor: "#f5f6f8",
-                  paddingVertical: 8,
-                  paddingHorizontal: 16,
-                }}
-              >
-                <Text style={{ flex: 1, color: "#959daf", fontWeight: "bold" }}>
+              <StyledListHeader>
+                <StyledListHeaderLabel style={{ flex: 1 }}>
                   Joueur
-                </Text>
-                <Text
-                  style={{ flex: 0.4, color: "#959daf", fontWeight: "bold" }}
-                >
+                </StyledListHeaderLabel>
+                <StyledListHeaderLabel style={{ flex: 0.4 }}>
                   Position
-                </Text>
-                <Text
-                  style={{ flex: 0.3, color: "#959daf", fontWeight: "bold" }}
-                >
+                </StyledListHeaderLabel>
+                <StyledListHeaderLabel style={{ flex: 0.3 }}>
                   Cote
-                </Text>
-              </Grid>
+                </StyledListHeaderLabel>
+              </StyledListHeader>
               {
                 <View style={{ flex: 1 }}>
                   <FlatList
@@ -134,21 +126,27 @@ export const HomeScreen = (props: Props) => {
                     data={players}
                     keyExtractor={(item: Player) => item.id}
                     scrollEventThrottle={16}
-                    // decelerationRate="fast"
-                    renderItem={({ item }: { item: Player }) => {
+                    renderItem={({
+                      item,
+                      index,
+                    }: {
+                      item: Player;
+                      index: number;
+                    }) => {
                       return (
                         <TouchableOpacity
                           onPress={() => goToPlayerDetails(item)}
                           style={{
                             width: "100%",
-                            padding: 8,
+                            height: 44,
+                            alignItems: "center",
+                            justifyContent: "center",
+                            backgroundColor:
+                              index % 2 ? "#e9e9e9" : "transparent",
                           }}
                         >
-                          <Grid
-                            justifyContent="space-between"
-                            style={{ width: "100%", paddingHorizontal: 8 }}
-                          >
-                            <Text
+                          <StyledListItem>
+                            <StyledListItemLabel
                               style={{
                                 flex: 1,
                                 color: "#333",
@@ -156,18 +154,18 @@ export const HomeScreen = (props: Props) => {
                               }}
                             >
                               {item.firstname} {item.lastname ?? item.lastname}
-                            </Text>
-                            <Text style={{ flex: 0.4 }}>
+                            </StyledListItemLabel>
+                            <StyledListItemLabel style={{ flex: 0.4 }}>
                               {
                                 ULTRA_POSITION_HUMAIN_READABLE[
                                   item.ultraPosition
                                 ]
                               }
-                            </Text>
-                            <Text style={{ flex: 0.3 }}>
+                            </StyledListItemLabel>
+                            <StyledListItemLabel style={{ flex: 0.3 }}>
                               {item.stats.avgRate}
-                            </Text>
-                          </Grid>
+                            </StyledListItemLabel>
+                          </StyledListItem>
                         </TouchableOpacity>
                       );
                     }}
@@ -177,7 +175,7 @@ export const HomeScreen = (props: Props) => {
             </>
           )}
         </Grid>
-      </SafeAreaView>
+      </StyledHomeScreen>
     </>
   );
 };

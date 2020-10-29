@@ -32,7 +32,6 @@ export const Navigation = (props: Props) => {
       screenOptions={{
         gestureEnabled: true,
         cardOverlayEnabled: true,
-        headerBackTitleVisible: false,
       }}
       initialRouteName={NAVIGATION_SCREENS.HOME}
     >

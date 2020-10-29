@@ -79,20 +79,23 @@ export const HomeScreen = (props: Props) => {
 
   return (
     <>
-      {Platform.OS === "ios" && (
-        <View
-          style={{
-            width: "100%",
-            height: 100,
-            position: "absolute",
-            top: 0,
-            left: 0,
-            backgroundColor: "#45c945",
-          }}
-        />
-      )}
+      <View
+        style={{
+          width: "100%",
+          height: 100,
+          position: "absolute",
+          top: 0,
+          left: 0,
+          backgroundColor: "#45c945",
+        }}
+      />
       <StatusBar style="light" />
-      <SafeAreaView style={{ flex: 1 }}>
+      <SafeAreaView
+        style={{
+          flex: 1,
+          paddingTop: Platform.OS === "android" ? 44 : 0,
+        }}
+      >
         <Filters
           title="Cherche ta chèvre"
           onFilter={filter}

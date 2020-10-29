@@ -8,6 +8,7 @@ import {
   Text,
   View,
 } from "react-native";
+import { TouchableOpacity } from "react-native-gesture-handler";
 
 import { Player } from "../../../hooks/useChampionship";
 import { usePlayerDetails } from "../../../hooks/usePlayerDetails";
@@ -110,21 +111,21 @@ export const DetailsScreen = ({ route }: Props) => {
 
   return (
     <>
-      {Platform.OS === "ios" && (
-        <View
-          style={{
-            width: "100%",
-            height: 44,
-            position: "absolute",
-            top: 0,
-            left: 0,
-            backgroundColor: "#45c945",
-          }}
-        />
-      )}
+      <View
+        style={{
+          width: "100%",
+          height: 44,
+          position: "absolute",
+          top: 0,
+          left: 0,
+          backgroundColor: "#45c945",
+        }}
+      />
       <StyledDetailsContains edges={["top", "left", "right"]}>
         <StyledDetailsHeader>
-          <Button title="Fermer" onPress={goBack} color="white" />
+          <TouchableOpacity onPress={goBack}>
+            <Text style={{ color: "white" }}>Fermer</Text>
+          </TouchableOpacity>
         </StyledDetailsHeader>
         <ScrollView>
           <StyledHero>

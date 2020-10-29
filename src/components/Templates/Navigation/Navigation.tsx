@@ -1,7 +1,6 @@
 import React from "react";
 import {
   createStackNavigator,
-  StackNavigationProp,
 } from "@react-navigation/stack";
 
 import { HomeScreen } from "../../Screens/HomeScreen/HomeScreen";
@@ -32,7 +31,6 @@ export const Navigation = (props: Props) => {
       screenOptions={{
         gestureEnabled: true,
         cardOverlayEnabled: true,
-        headerBackTitleVisible: false,
       }}
       initialRouteName={NAVIGATION_SCREENS.HOME}
     >

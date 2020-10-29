@@ -9,6 +9,7 @@ export const StyledDetailsContains = styled(SafeAreaView)`
 
 export const StyledDetailsHeader = styled(Grid)`
   background-color: #45c945;
+  padding: 16px;
 `;
 
 export const StyledHero = styled(Grid)`
